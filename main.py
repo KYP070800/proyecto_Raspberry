@@ -2,9 +2,9 @@ import RPi.GPIO as GPIO
 import time
 
 # Configuración de pines
-sensores = [14(8), 16(36), 18(12), 23(16), 25(22)]  # Pines GPIO para configurar los sensores, ventana sala, incendio, ventana habitacion, puerta principal y salida, sensor de gas 
-alarma = 2  # Pin GPIO para configurar como salida
-interruptor = 21  # Pin GPIO para el interruptor ender y apagar el sistema
+sensores = [8, 12, 16, 22, 36]  # Pines GPIO para configurar los sensores: ventana sala, ventana habitación, puerta principal y salida, sensor de gas, incendio 
+alarma = 3  # Pin GPIO para configurar alarma como salida
+interruptor = 40  # Pin GPIO para el interruptor para encender y apagar el sistema
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
