@@ -1,36 +1,54 @@
 import RPi.GPIO as GPIO
+from Modulos.sala import sensorSala
+from Modulos.habitacion import sensorHabitacion
+from Modulos.puerta import sensorPuerta
 import time
 
+
 # Configuración de pines
-sensores = [14(8), 16(36), 18(12), 23(16), 25(22)]  # Pines GPIO para configurar los sensores, ventana sala, incendio, ventana habitacion, puerta principal y salida, sensor de gas 
-alarma = 2  # Pin GPIO para configurar como salida
-interruptor = 21  # Pin GPIO para el interruptor ender y apagar el sistema
+# sensores = [8, 12, 16, 22, 36]  # Pines GPIO para configurar los sensores: ventana sala, ventana habitación, puerta principal y salida, sensor de gas, incendio 
+alarma = 3  # Pin GPIO para configurar alarma como salida
+interruptor = 40  # Pin GPIO para el interruptor para encender y apagar el sistema
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 
 # Configuración de la biblioteca RPi.GPIO
-GPIO.setup(sensores, GPIO.IN)
+#GPIO.setup(sensores, GPIO.IN)
 GPIO.setup(alarma, GPIO.OUT)
 GPIO.setup(interruptor, GPIO.IN)
 
-try:
-    while True:
-        # Leer el estado de los pines de entrada
-        estados_entrada = [GPIO.input(pin) for pin in sensores]
-        print("Estados de pines de entrada:", estados_entrada)
+while True:
+    # Leer el estado de la interrupción
+    estado_interruptor = GPIO.INPUT(interruptor)
 
-        # Leer el estado del interruptor
-        estado_interruptor = GPIO.input(interruptor)
-        print("Estado del interruptor:", estado_interruptor)
+    if estado_interruptor == GPIO.HIGH:
+        print("Sistema activado")
 
-        # Cambiar el estado del pin de salida cada segundo
-        GPIO.output(alarma, not GPIO.input(alarma))
-        time.sleep(1)
+        s_sala = sensorSala()
+        print("Sensor sala", s_sala)
 
-except KeyboardInterrupt:
-    print("Programa interrumpido por el usuario")
+        s_habitacion = sensorHabitacion()
+        
+        if s_sala == GPIO.HIGH:
+            GPIO.output(alarma, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(alarma, GPIO.HIGH)
 
-finally:
-    # Limpiar configuración al salir
-    GPIO.cleanup()        
+        if s_habitacion == GPIO.HIGH:
+            GPIO.output(alarma, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(alarma, GPIO.HIGH)
+
+        if s_puerta == GPIO.HIGH:
+            GPIO.output(alarma, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(alarma, GPIO.HIGH)   
+
+        else:
+            GPIO.output(alarma, GPIO.LOW)
+
+    else:
+        print("Sistema desactivado")
+
+    time.sleep(1)       
