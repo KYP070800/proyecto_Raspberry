@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from Modulos.sala import sensorSala
 from Modulos.habitacion import sensorHabitacion
+from Modulos.puerta import sensorPuerta
 import time
 
 
@@ -38,6 +39,11 @@ while True:
             GPIO.output(alarma, GPIO.HIGH)
             time.sleep(3)
             GPIO.output(alarma, GPIO.HIGH)
+
+        if s_puerta == GPIO.HIGH:
+            GPIO.output(alarma, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(alarma, GPIO.HIGH)   
 
         else:
             GPIO.output(alarma, GPIO.LOW)
