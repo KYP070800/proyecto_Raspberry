@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 # Configuración de pines
-sala = 16  # Pin GPIO para configurar el sensor puerta sala 
+puerta = 16  # Pin GPIO para configurar el sensor puerta sala 
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)

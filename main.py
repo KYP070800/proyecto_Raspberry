@@ -5,7 +5,30 @@ from Modulos.puerta import sensorPuerta
 from Modulos.gas import sensorGas
 from Modulos.Incendio import sensorIncendio
 import time
+from email.message import EmailMessage
+import smtplib
+from datetime import datetime
 
+
+lcFecha = datetime.now().strftime('%Y-%m-%d') 
+lcNombreArchivo = "/var/www/html/Fecha"+lcFecha+".csv"
+lcNombreSolo = "Fecha"+lcFecha+".csv"
+
+remitente = "saw79989@gmail.com"
+destinatario = ["emmanuel.caipe@correounivalle.edu.co" , "hernandez.bryan@correounivalle.edu.co" , "milton.millan@correounivalle.edu.co"]
+
+mensaje = "Hola Equipo De Trabajo"
+
+email = EmailMessage()
+email["From"] = remitente
+email["To"] = destinatario
+email["Subject"] = "Proyecto_Raspberry: " 
+email.set_content(mensaje)
+smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+smtp.login(remitente, "frwl pfdo ivjn kmhf")
+smtp.sendmail(remitente, destinatario, email.as_string())
+
+smtp.quit()
 
 # Configuración de pines
 # sensores = [8, 12, 16, 22, 36]  # Pines GPIO para configurar los sensores: ventana sala, ventana habitación, puerta principal y salida, sensor de gas, incendio 
@@ -22,7 +45,7 @@ GPIO.setup(interruptor, GPIO.IN)
 
 while True:
     # Leer el estado de la interrupción
-    estado_interruptor = GPIO.INPUT(interruptor)
+    estado_interruptor = GPIO.IN(interruptor)
 
     if estado_interruptor == GPIO.HIGH:
         print("Sistema activado")
